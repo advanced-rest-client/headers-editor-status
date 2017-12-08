@@ -19,7 +19,7 @@ the License.
 `<headers-editor-status>` A status bar for the headers editor
 
 Can display computed size of the headers and validation status of
-the headers editor. 
+the headers editor.
 
 ### Example
 ```
@@ -48,17 +48,17 @@ Custom property | Description | Default
     :host {
       display: block;
       padding: 4px 12px;
-      @apply(--headers-editor-status);
+      @apply --headers-editor-status;
     }
 
     .status-line {
-      @apply(--layout-horizontal);
+      @apply --layout-horizontal;
     }
 
     .validation-status {
-      @apply(--layout-horizontal);
-      @apply(--layout-flex);
-      @apply(--layout-center);
+      @apply --layout-horizontal;
+      @apply --layout-flex;
+      @apply --layout-center;
     }
 
     .validation-status,
@@ -74,13 +74,13 @@ Custom property | Description | Default
     .message {
       margin: 0 12px;
       padding: 0;
-      @apply(--arc-font-body1);
+      @apply --arc-font-body1;
       white-space: pre;
-      @apply(--headers-editor-status-message);
+      @apply --headers-editor-status-message;
     }
 
     .bytes-counter {
-      @apply(--arc-font-body1);
+      @apply --arc-font-body1;
       color: var(--headers-editor-status-counter-color, rgba(0, 0, 0, 0.54));
     }
     </style>
@@ -90,6 +90,7 @@ Custom property | Description | Default
         <p class="message">[[message]]</p>
       </div>
       <div class="bytes-counter">
+        <span>Headers size:</span>
         <span>[[size]]</span>
         <span>bytes</span>
       </div>
@@ -102,15 +103,38 @@ Custom property | Description | Default
       /**
        * Headers size in bytes.
        */
-      size: Number,
+      size: {
+        type: Number,
+        value: 0
+      },
       /**
        * Should be set to true to indicate error an display the error message.
        */
-      invalid: Boolean,
+      invalid: {
+        type: Boolean,
+        value: false
+      },
       /**
        * Error message to display in case of error.
        */
-      message: String
+      message: String,
+      /**
+       * A default message to display when the headers are valid.
+       */
+      defaultMessage: {
+        type: String,
+        value: 'Headers are valid'
+      }
+    },
+
+    observers: [
+      '_updateDefault(invalid, defaultMessage)'
+    ],
+
+    _updateDefault: function(invalid, message) {
+      if (!invalid) {
+        this.message = message;
+      }
     }
   });
   </script>

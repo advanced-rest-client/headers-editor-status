@@ -16,9 +16,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../iron-test-helpers/test-helpers.js"></script>
-    <script src="../../iron-test-helpers/mock-interactions.js"></script>
-
-    <!-- Step 1: import the element to test -->
     <link rel="import" href="../headers-editor-status.html">
   </head>
   <body>
@@ -29,15 +26,47 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </template>
     </test-fixture>
 
+    <test-fixture id="message">
+      <template>
+        <headers-editor-status default-message="Test"></headers-editor-status>
+      </template>
+    </test-fixture>
+
     <script>
-    /* global suite, test, fixture, assert */
+    /* global fixture, assert, TestHelpers */
     suite('basic', function() {
       var element;
       setup(function() {
         element = fixture('basic');
       });
-      test('`headers-editor-status` should be initialized', function() {
-        assert.equal(element.isAttached, true, 'element.isAttached equals true');
+      test('Default size is 0', function() {
+        assert.equal(element.size, 0);
+      });
+      test('Is valid by default', function() {
+        assert.isFalse(element.invalid);
+      });
+      test('Has valid message', function() {
+        assert.equal(element.message, element.defaultMessage);
+      });
+
+      test('Setting invalid changes message color', function() {
+        var elm = element.$$('.validation-status');
+        var before = getComputedStyle(elm).getPropertyValue('color');
+        element.invalid = true;
+        TestHelpers.forceXIfStamp(element);
+        var after = getComputedStyle(element).getPropertyValue('color');
+        assert.notEqual(after, before);
+      });
+    });
+
+    suite('basic', function() {
+      var element;
+      setup(function() {
+        element = fixture('message');
+      });
+
+      test('Has valid message', function() {
+        assert.equal(element.message, 'Test');
       });
     });
     </script>
