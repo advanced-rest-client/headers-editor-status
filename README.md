@@ -5,7 +5,7 @@
 `<headers-editor-status>` A status bar for the headers editor
 
 Can display computed size of the headers and validation status of
-the headers editor. 
+the headers editor.
 
 ### Example
 ```
